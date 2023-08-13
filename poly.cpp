@@ -1,23 +1,13 @@
-#include<cassert>
-#include<vector>
+#include"fraction.h"
+#include<iostream>
 #include<map>
 #include<string>
-#include<iostream>
-#include"fraction.h"
+#include<vector>
+#include<cassert>
+using namespace std;
 
 #define pb push_back
 #define mp make_pair
-
-template<class TOS> // TOS: totally ordered set
-bool operator <(const vector<TOS> &a, const vector<TOS> &b){
-    if(a.empty()) return !b.empty();
-    for(int i=0; i<=(int)a.size()-1; i++){
-        if(i == (int)b.size()) return false;
-        if(a[i] < b[i]) return true;
-        else if(b[i] < a[i]) return false;
-    }
-    return a.size() < b.size();
-}
 
 template<class R, unsigned int n> // R: a ring, n: the number of the variables
 class polynomial{
@@ -99,14 +89,7 @@ public:
         return *this = *this * another;
     }
     bool operator ==(const polynomial<R, n> &another) const{
-        auto it = p.begin(), jt = another.p.begin();
-        for(; it!=p.end() && jt!=another.p.end(); it++, jt++){
-            for(int k=0; k<=(int)n-1; k++){
-                if(it->first[k] != jt->first[k]) return false;
-            }
-            if(it->second != jt->second) return false;
-        }
-        return it == p.end() && jt == another.p.end();
+        return p == another.p;
     }
     bool operator !=(const polynomial<R, n> &another) const{
         return !(*this == another);
@@ -157,7 +140,7 @@ polynomial<F, n> poly_S(const polynomial<F, n> &f, const polynomial<F, n> &g){
 template<class F, unsigned int n>
 void poly_division(const polynomial<F, n> &f, const vector<polynomial<F, n>> &g, vector<polynomial<F, n>> &q, polynomial<F, n> &r){
     assert(!g.empty());
-    int m = g.size();
+    int m = (int)g.size();
     for(int i=0; i<=m-1; i++){
         assert(g[i] != F(0));
     }
